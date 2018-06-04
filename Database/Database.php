@@ -28,9 +28,9 @@ abstract class Database
     public function __construct(
         string $dbms,
         string $dbname,
-        string $dbuser = 'root',
-        string $dbpass = 'root',
-        string $dbhost = 'localhost'
+        string $dbuser,
+        string $dbpass,
+        string $dbhost
     ) {
         $this->dbms = $dbms;
         $this->dbname = $dbname;
@@ -47,11 +47,15 @@ abstract class Database
     protected function getPDO()
     {
         if ($this->pdo === null) {
-            $pdo = new PDO(
-                $this->dbms . ':dbname=' . $this->dbname . ';host=' . $this->dbhost,
-                $this->dbuser,
-                $this->dbpass
-            );
+            try {
+                $pdo = new PDO(
+                    $this->dbms . ':dbname=' . $this->dbname . ';host=' . $this->dbhost,
+                    $this->dbuser,
+                    $this->dbpass
+                );
+            } catch (\PDOException $e) {
+                die('Connection failed : ' . $e->getMessage());
+            }
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo = $pdo;
         }

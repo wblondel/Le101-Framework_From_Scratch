@@ -18,7 +18,9 @@ class Config
      */
     public function __construct($file)
     {
-        $this->settings = require($file);
+        if (is_file($file)) {
+            $this->settings = require($file);
+        }
     }
 
     /**
