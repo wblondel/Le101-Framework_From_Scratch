@@ -3,6 +3,7 @@
 namespace Core\Auth;
 
 use Core\Database\Database;
+use Core\Session\Session;
 
 /**
  * Class DBAuth
@@ -15,9 +16,11 @@ class DBAuth extends Auth
     /**
      * DBAuth constructor.
      * @param Database $db
+     * @param Session $session
      */
-    public function __construct(Database $db)
+    public function __construct(Database $db, Session $session)
     {
+        parent::__construct($session);
         $this->db = $db;
     }
 
@@ -31,7 +34,7 @@ class DBAuth extends Auth
         $user = $this->db->prepare('SELECT * FROM users WHERE username = ?', [$username], null, true);
         if ($user) {
             if (password_verify($password, $user->password)) {
-                $_SESSION['auth'] = $user->id;
+                $this->session->write('auth', $user->id);
                 return true;
             }
         }

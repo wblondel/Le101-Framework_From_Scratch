@@ -2,21 +2,23 @@
 
 namespace Core\Auth;
 
+use Core\Session\Session;
+
 /**
  * Class Auth
  * @package Core\Auth
  */
 abstract class Auth
 {
+    protected $session;
+
     /**
-     * @return int
+     * Auth constructor.
+     * @param Session $session
      */
-    public function getUserId()
+    public function __construct(Session $session)
     {
-        if ($this->isLogged()) {
-            return $_SESSION['auth'];
-        }
-        return false;
+        $this->session = $session;
     }
 
     /**
@@ -24,6 +26,6 @@ abstract class Auth
      */
     public function isLogged()
     {
-        return isset($_SESSION['auth']);
+        return !is_null($this->session->read('auth'));
     }
 }
