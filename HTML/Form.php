@@ -56,6 +56,7 @@ class Form
     public function input(string $name, string $label, array $options = [])
     {
         $id = isset($options['id']) ? $options['id'] : $name;
+        $required = isset($options['required']) ? 'required' : '';
         $type = isset($options['type']) ? $options['type'] : 'text';
         $placeholder = isset($options['placeholder']) ? $options['placeholder'] : '';
         $label = '<label for="' . $id . '">' . $label . '</label>';
@@ -70,11 +71,11 @@ class Form
         }
 
         if ($type === 'textarea') {
-            $input = '<textarea name="' . $name . '" ' . $classes . '>' . $this->getValue($name) . '</textarea>';
+            $input = '<textarea name="' . $name . '" ' . $classes . ' ' . $required . '>' . $this->getValue($name) . '</textarea>';
         } else {
             $input = '<input type="' . $type . '" name="' . $name . '" id="' . $id .
                 '" value="' . $this->getValue($name) . '" placeholder="' . $placeholder .
-                '" ' . $classes . '>';
+                '" ' . $classes . ' ' . $required . '>';
         }
         return $this->surround($label . $input);
     }
@@ -90,6 +91,7 @@ class Form
     public function select(string $name, string $label, $choices, array $options = [])
     {
         $label = '<label>' . $label . '</label>';
+        $required = isset($options['required']) ? 'required' : '';
         $classes = '';
 
         if (!empty($options['class'])) {
@@ -100,7 +102,7 @@ class Form
             $classes .= '"';
         }
 
-        $input = '<select ' . $classes . ' name="' . $name . '">';
+        $input = '<select ' . $classes . ' name="' . $name . '" ' . $required . '>';
         foreach ($choices as $k => $v) {
             $attributes = '';
             if ($k == $this->getValue($name)) {
