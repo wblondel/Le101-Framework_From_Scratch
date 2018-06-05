@@ -16,11 +16,11 @@ class Table
 
     /**
      * Table constructor.
-     * @param Database $db
+     * @param Database $database
      */
-    public function __construct(Database $db)
+    public function __construct(Database $database)
     {
-        $this->db = $db;
+        $this->db = $database;
         if (is_null($this->table)) {
             $parts = explode('\\', get_class($this));
             $class_name = end($parts);
