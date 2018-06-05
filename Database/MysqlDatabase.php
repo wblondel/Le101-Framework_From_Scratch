@@ -20,11 +20,11 @@ class MysqlDatabase extends Database
         $dbuser = null,
         $dbpass = null,
         $dbhost = null
-	) {
-		$dbname = is_null($dbname) ? "mydb" : $dbname;
-		$dbuser = is_null($dbuser) ? "root" : $dbuser;
-		$dbpass = is_null($dbpass) ? "root" : $dbpass;
-		$dbhost = is_null($dbhost) ? "127.0.0.1" : $dbhost;
+    ) {
+        $dbname = is_null($dbname) ? "mydb" : $dbname;
+        $dbuser = is_null($dbuser) ? "root" : $dbuser;
+        $dbpass = is_null($dbpass) ? "root" : $dbpass;
+        $dbhost = is_null($dbhost) ? "127.0.0.1" : $dbhost;
         parent::__construct('mysql', $dbname, $dbuser, $dbpass, $dbhost);
     }
 
