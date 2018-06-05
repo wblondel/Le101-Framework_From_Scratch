@@ -118,7 +118,7 @@ abstract class Database
      * Return the id of the last inserted element.
      * @return string
      */
-    protected function lastInsertId()
+    public function lastInsertId()
     {
         return $this->getPDO()->lastInsertId();
     }
