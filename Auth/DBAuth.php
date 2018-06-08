@@ -166,9 +166,9 @@ class DBAuth extends Auth
             $user_id = $parts[0];
             $user = $this->db->prepare('SELECT * FROM users WHERE id = ?', [$user_id], null, true);
             if ($user) {
-                $expected = $user_id . '==' . $user->remember_token . sha1($user_id, 'ratonlaveurs');
+                $expected = $user_id . '==' . $user->remember_token . sha1($user_id . 'ratonlaveurs');
                 if ($expected == $remember_token) {
-                    $this->connect($user);
+                    $this->connect($user_id);
                     setcookie('remember', $remember_token, time() + 60 * 60 * 24 * 7);
                 } else {
                     setcookie('remember', null, -1);
