@@ -16,7 +16,7 @@ class DBAuth extends Auth
 
     /**
      * DBAuth constructor.
-     * @param Database $db
+     * @param Database $database
      * @param Session $session
      */
     public function __construct(Database $database, Session $session)
