@@ -75,6 +75,34 @@ abstract class Auth
      */
     abstract protected function logout();
 
+
+    /**
+     * Set the reset password token of a user.
+     *
+     * @param string $email
+     * @param string $token
+     * @return mixed
+     */
+    abstract protected function setResetPasswordToken(string $email, string $token);
+
+    /**
+     * Checks the given password reset token.
+     *
+     * @param string $user_id
+     * @param string $token
+     * @return mixed
+     */
+    abstract protected function checkPasswordResetToken(string $user_id, string $token);
+
+    /**
+     * Reset password of a user.
+     *
+     * @param string $user_id
+     * @param string $password
+     * @return mixed
+     */
+    abstract protected function resetPassword(string $user_id, string $password);
+
     /**
      * @return bool
      */

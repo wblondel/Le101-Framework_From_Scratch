@@ -54,7 +54,7 @@ class Validator
      * @param string $table
      * @param string $errorMsg
      */
-    public function isUnique(string $field, Database $database, string $table, string $errorMsg)
+    public function isUnique(string $field, Database $database, string $table, string $errorMsg = '')
     {
         $record = $database->prepare("SELECT id FROM $table WHERE $field = ?", [$this->getField($field)], null, one);
         if ($record) {
@@ -66,7 +66,7 @@ class Validator
      * @param string $field
      * @param string $errorMsg
      */
-    public function isEmail(string $field, string $errorMsg)
+    public function isEmail(string $field, string $errorMsg = '')
     {
         if (!filter_var($this->getField($field), FILTER_VALIDATE_EMAIL)) {
             $this->errors[$field] = $errorMsg;
@@ -77,9 +77,10 @@ class Validator
      * @param $field
      * @param $errorMsg
      */
-    public function isConfirmed($field, $errorMsg)
+    public function isConfirmed(string $field, string $errorMsg = '')
     {
-        if (empty($this->getField($field)) || $this->getField($field) != $this->getField($field . '_confirm')) {
+        $value = $this->getField($field);
+        if (empty($value) || $value != $this->getField($field . '_confirm')) {
             $this->errors[$field] = $errorMsg;
         }
     }

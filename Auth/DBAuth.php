@@ -26,6 +26,14 @@ class DBAuth extends Auth
     }
 
     /**
+     * @param $password
+     * @return bool|string
+     */
+    public function hashPassword($password) {
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    /**
      * Register a user.
      * @param string $username
      * @param string $password
@@ -35,7 +43,7 @@ class DBAuth extends Auth
      */
     public function register(string $username, string $password, string $email, string $token)
     {
-        $password = password_hash($password, PASSWORD_DEFAULT);
+        $password = $this->hashPassword($password);
         $res = $this->db->prepare(
             'INSERT INTO users SET username = ?, password = ?, email = ?, confirmation_token = ?',
             [
@@ -118,6 +126,66 @@ class DBAuth extends Auth
         return false;
     }
 
+
+    /**
+     * Set the reset password token of a user.
+     *
+     * @param string $email
+     * @param string $token
+     * @return mixed
+     */
+    public function setResetPasswordToken(string $email, string $token)
+    {
+        $user = $this->db->prepare('SELECT * FROM users WHERE email = ? AND confirmed_at IS NOT NULL', [$email], null, true);
+
+        if ($user) {
+            $this->db->prepare(
+                'UPDATE users SET reset_token = ?, reset_at = NOW() WHERE id = ?',
+                [$token, $user->id],
+                null,
+                true
+            );
+            return $user;
+        }
+        return false;
+    }
+
+
+    /**
+     * Checks the given password reset token.
+     *
+     * @param string $user_id
+     * @param string $token
+     * @return mixed
+     */
+    public function checkPasswordResetToken(string $user_id, string $token)
+    {
+        return $this->db->prepare(
+            'SELECT * FROM users WHERE id = ? AND reset_token IS NOT NULL AND reset_token = ? AND reset_at > DATE_SUB(NOW(), INTERVAL 30 MINUTE)',
+            [$user_id, $token],
+            null,
+            true
+        );
+    }
+
+
+    /**
+     * Reset password of a user.
+     *
+     * @param string $user_id
+     * @param string $password
+     * @return mixed
+     */
+    public function resetPassword(string $user_id, string $password)
+    {
+        $this->db->prepare(
+            'UPDATE users SET password = ?, reset_at = NULL, reset_token = NULL WHERE id = ?',
+            [$password, $user_id],
+            null,
+            true
+        );
+    }
+
     /**
      * Log out the user.
      */
@@ -128,7 +196,6 @@ class DBAuth extends Auth
     }
 
     /**
-     * @param string $user_id
      * @return bool
      */
     public function connectedUserExists()
