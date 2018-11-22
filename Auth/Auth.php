@@ -37,8 +37,7 @@ abstract class Auth
     {
         if (!$this->isLogged()) {
             $this->session->setFlash('danger', "You can't access this page.");
-            header('Location: index.php');
-            exit();
+            exit(header('Location: /'));
         }
     }
 
