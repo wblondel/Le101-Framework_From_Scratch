@@ -39,8 +39,7 @@ class Controller
      */
     protected function forbidden()
     {
-        header('HTTP/1.0 403 Forbidden');
-        die('403 Forbidden');
+        exit(http_response_code(403));
     }
 
     /**
@@ -48,8 +47,7 @@ class Controller
      */
     protected function notFound()
     {
-        header('HTTP/1.0 404 Not Found');
-        die('404 Not Found');
+        exit(http_response_code(404));
     }
 
     /**
@@ -57,8 +55,7 @@ class Controller
      */
     protected function badRequest()
     {
-        header('HTTP/1.0 400 Bad Request');
-        die('400 Bad Request');
+        exit(http_response_code(400));
     }
 
     /**
@@ -69,14 +66,15 @@ class Controller
      */
     protected function redirect(string $controller, string $action, string $mode = null)
     {
-        $location = 'index.php?p=';
+        $location = '/';
 
         if (!is_null($mode)) {
-            $location .= $mode . '.';
+            $location .= $mode . '/';
         }
 
-        $location .= $controller . '.';
+        $location .= $controller . '/';
         $location .= $action;
         header('Location: ' . $location);
+        exit();
     }
 }
