@@ -64,7 +64,7 @@ class Controller
      * @param string $action
      * @param string|null $mode
      */
-    protected function redirect(string $controller, string $action, string $mode = null)
+    protected function redirect(string $controller = null, string $action = null, string $mode = null)
     {
         $location = '/';
 
@@ -72,8 +72,14 @@ class Controller
             $location .= $mode . '/';
         }
 
-        $location .= $controller . '/';
-        $location .= $action;
+        if (!is_null($controller)) {
+            $location .= $controller . '/';
+
+            if (!is_null($action)) {
+                $location .= $action;
+            }
+        }
+
         header('Location: ' . $location);
         exit();
     }
