@@ -60,7 +60,7 @@ class Validator
      */
     public function isUnique(string $field, Database $database, string $table, string $errorMsg = '')
     {
-        $record = $database->prepare("SELECT id FROM $table WHERE $field = ?", [$this->getField($field)], null, one);
+        $record = $database->prepare("SELECT id FROM $table WHERE $field = ?", [$this->getField($field)], null, true);
         if ($record) {
             $this->errors[$field] = $errorMsg;
             return false;
