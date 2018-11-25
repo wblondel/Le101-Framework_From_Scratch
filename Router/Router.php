@@ -32,7 +32,7 @@ class Router
      */
     public function get($path, $callable, $name = null)
     {
-        return $this->add($path, $callable, $name, 'POST');
+        return $this->add($path, $callable, $name, 'GET');
     }
 
     /**
@@ -45,7 +45,7 @@ class Router
      */
     public function post($path, $callable, $name = null)
     {
-        return $this->add($path, $callable, $name, 'GET');
+        return $this->add($path, $callable, $name, 'POST');
     }
 
     /**
