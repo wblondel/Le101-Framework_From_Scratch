@@ -36,7 +36,7 @@ abstract class Auth
     public function restrict()
     {
         if (!$this->isLogged()) {
-            $this->session->setFlash('danger', "You can't access this page.");
+            $this->session->setFlash('danger', _("You can't access this page."));
             exit(header('Location: /'));
         }
     }
