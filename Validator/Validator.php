@@ -64,7 +64,7 @@ class Validator
      */
     public function isPasswordStrong(string $field, string $errorMsg)
     {
-        if (!preg_match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})', $this->getField($field))) {
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/', $this->getField($field))) {
             $this->errors[$field] = $errorMsg;
             return false;
         }
