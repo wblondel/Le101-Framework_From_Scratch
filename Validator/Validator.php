@@ -50,6 +50,26 @@ class Validator
         return true;
     }
 
+    /**
+     * Check if a password meets the following requirements:
+     * - it must contain at least 1 lowercase alphabetical character
+     * - it must contain at least 1 uppercase alphabetical character
+     * - it must contain at least 1 numeric character
+     * - it must contain at least one special character
+     * - it must be 8 characters or longer
+     *
+     * @param string $field
+     * @param string $errorMsg
+     * @return bool
+     */
+    public function isPasswordStrong(string $field, string $errorMsg)
+    {
+        if (!preg_match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})', $this->getField($field))) {
+            $this->errors[$field] = $errorMsg;
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @param string $field
