@@ -99,7 +99,7 @@ class Session
             );
         }
 
-        setcookie('remember', '', time() - 1);
+        setcookie('remember', '', time() - 1, '/');
 
         session_destroy();
         self::$instance = null;
