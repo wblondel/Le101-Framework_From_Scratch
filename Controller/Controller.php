@@ -25,7 +25,7 @@ class Controller
      * @param string $view
      * @param array $variables
      */
-    protected function render(string $view, string $pageTitle = null, array $res = null, $variables = [])
+    protected function render(string $view, $variables = [], string $pageTitle = null, array $res = null)
     {
         ob_start();
         extract($variables);
