@@ -102,7 +102,8 @@ class DBAuth extends Auth
         setcookie(
             'remember',
             $userId . '==' . $rememberToken . sha1($userId . 'ratonlaveurs'),
-            time() + 60 * 60 * 24 * 7
+            time() + 60 * 60 * 24 * 7,
+            '/'
         );
     }
 
