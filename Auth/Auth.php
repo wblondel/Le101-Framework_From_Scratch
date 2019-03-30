@@ -62,11 +62,11 @@ abstract class Auth
 
     /**
      * Confirm a user account.
-     * @param string $user_id
+     * @param string $userId
      * @param string $token
      * @return mixed
      */
-    abstract protected function confirm(string $user_id, string $token);
+    abstract protected function confirm(string $userId, string $token);
 
     /**
      * Logout the user.
@@ -87,20 +87,20 @@ abstract class Auth
     /**
      * Checks the given password reset token.
      *
-     * @param string $user_id
+     * @param string $userId
      * @param string $token
      * @return mixed
      */
-    abstract protected function checkPasswordResetToken(string $user_id, string $token);
+    abstract protected function checkPasswordResetToken(string $userId, string $token);
 
     /**
      * Reset password of a user.
      *
-     * @param string $user_id
+     * @param string $userId
      * @param string $password
      * @return mixed
      */
-    abstract protected function resetPassword(string $user_id, string $password);
+    abstract protected function resetPassword(string $userId, string $password);
 
     /**
      * @return bool

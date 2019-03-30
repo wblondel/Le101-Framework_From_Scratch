@@ -29,7 +29,8 @@ class DBAuth extends Auth
      * @param $password
      * @return bool|string
      */
-    public function hashPassword($password) {
+    public function hashPassword($password)
+    {
         return password_hash($password, PASSWORD_DEFAULT);
     }
 
@@ -87,37 +88,37 @@ class DBAuth extends Auth
     }
 
     /**
-     * @param $user_id
+     * @param $userId
      */
-    public function remember($user_id)
+    public function remember($userId)
     {
-        $remember_token = Str::random(250);
+        $rememberToken = Str::random(250);
         $this->db->prepare(
             'UPDATE users SET remember_token = ? WHERE id = ?',
-            [$remember_token, $user_id],
+            [$rememberToken, $userId],
             null,
             true
         );
         setcookie(
             'remember',
-            $user_id . '==' . $remember_token . sha1($user_id . 'ratonlaveurs'),
+            $userId . '==' . $rememberToken . sha1($userId . 'ratonlaveurs'),
             time() + 60 * 60 * 24 * 7
         );
     }
 
     /**
      * Confirm a user account.
-     * @param string $user_id
+     * @param string $userId
      * @param string $token
      * @return bool
      */
-    public function confirm(string $user_id, string $token)
+    public function confirm(string $userId, string $token)
     {
-        $user = $this->db->prepare('SELECT * FROM users where id = ?', [$user_id], null, true);
+        $user = $this->db->prepare('SELECT * FROM users where id = ?', [$userId], null, true);
         if ($user && $user->confirmation_token == $token) {
             $this->db->prepare(
                 'UPDATE users SET confirmation_token = NULL, confirmed_at = NOW() WHERE id = ?',
-                [$user_id],
+                [$userId],
                 null,
                 true
             );
@@ -154,15 +155,15 @@ class DBAuth extends Auth
     /**
      * Checks the given password reset token.
      *
-     * @param string $user_id
+     * @param string $userId
      * @param string $token
      * @return mixed
      */
-    public function checkPasswordResetToken(string $user_id, string $token)
+    public function checkPasswordResetToken(string $userId, string $token)
     {
         return $this->db->prepare(
             'SELECT * FROM users WHERE id = ? AND reset_token IS NOT NULL AND reset_token = ? AND reset_at > DATE_SUB(NOW(), INTERVAL 30 MINUTE)',
-            [$user_id, $token],
+            [$userId, $token],
             null,
             true
         );
@@ -172,15 +173,15 @@ class DBAuth extends Auth
     /**
      * Reset password of a user.
      *
-     * @param string $user_id
+     * @param string $userId
      * @param string $password
      * @return mixed
      */
-    public function resetPassword(string $user_id, string $password)
+    public function resetPassword(string $userId, string $password)
     {
         $this->db->prepare(
             'UPDATE users SET password = ?, reset_at = NULL, reset_token = NULL WHERE id = ?',
-            [$password, $user_id],
+            [$password, $userId],
             null,
             true
         );
@@ -215,11 +216,11 @@ class DBAuth extends Auth
     }
 
     /**
-     * @param $user_id
+     * @param $userId
      */
-    public function connect($user_id)
+    public function connect($userId)
     {
-        $this->session->write('auth', $user_id);
+        $this->session->write('auth', $userId);
     }
 
     /**
@@ -236,12 +237,12 @@ class DBAuth extends Auth
                 $expected = $user_id . '==' . $user->remember_token . sha1($user_id . 'ratonlaveurs');
                 if ($expected == $remember_token) {
                     $this->connect($user_id);
-                    setcookie('remember', $remember_token, time() + 60 * 60 * 24 * 7);
+                    setcookie('remember', $remember_token, time() + 60 * 60 * 24 * 7, '/');
                 } else {
-                    setcookie('remember', null, -1);
+                    setcookie('remember', null, -1, '/');
                 }
             } else {
-                setcookie('remember', null, -1);
+                setcookie('remember', null, -1, '/');
             }
         }
     }
