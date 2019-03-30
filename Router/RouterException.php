@@ -2,7 +2,6 @@
 
 namespace Core\Router;
 
-
 use Exception;
 
 /**
@@ -11,5 +10,14 @@ use Exception;
  */
 class RouterException extends Exception
 {
-
+    /**
+     * RouterException constructor.
+     *
+     * @param string $message
+     * @param int $code
+     */
+    public function __construct(string $message = null, int $code = 0)
+    {
+        parent::__construct($message, $code);
+    }
 }

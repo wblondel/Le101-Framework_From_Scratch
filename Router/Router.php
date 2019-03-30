@@ -2,9 +2,9 @@
 
 namespace Core\Router;
 
-
 /**
  * Class Router
+ *
  * @package Core\Router
  */
 class Router
@@ -74,21 +74,29 @@ class Router
      * Call the function associated to the current route
      *
      * @return mixed
-     * @throws RouterException
      */
     public function run()
     {
-        if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
-            $this->notFound();
-        }
-
-        foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
-            if($route->match($this->url)) {
-                return $route->call();
+        try {
+            if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
+                throw new RouterException('REQUEST_METHOD does not exist', 405);
             }
-        }
 
-        $this->notFound();
+            foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
+                if ($route->match($this->url)) {
+                    return $route->call();
+                }
+            }
+
+            throw new RouterException('No matching routes', 404);
+        } catch (RouterException $e) {
+            if (($e->getCode() === 404) && ($_SERVER['REQUEST_METHOD'] !== "GET")) {
+                http_response_code(404);
+            } else {
+                http_response_code($e->getCode());
+            }
+            exit();
+        }
     }
 
     /**
@@ -99,15 +107,11 @@ class Router
      * @return mixed
      * @throws RouterException
      */
-    public function url($name, $params = []) {
+    public function url($name, $params = [])
+    {
         if (!isset($this->namedRoutes[$name])) {
-            $this->notFound();
+            throw new RouterException('No route matches this name');
         }
         return $this->namedRoutes[$name]->getUrl($params);
-    }
-
-    private function notFound()
-    {
-        exit(http_response_code(404));
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Core\Router;
 
-
 /**
  * Class Route
+ *
  * @package Core\Router
  */
 class Route
@@ -49,7 +49,7 @@ class Route
         $url = trim($url, '/');
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
         $regex = "#^$path$#i";
-        if(!preg_match($regex, $url, $matches)) {
+        if (!preg_match($regex, $url, $matches)) {
             return false;
         }
         array_shift($matches);
@@ -63,7 +63,8 @@ class Route
      * @param $match
      * @return string
      */
-    private function paramMatch($match) {
+    private function paramMatch($match)
+    {
         if (isset($this->params[$match[1]])) {
             return '(' . $this->params[$match[1]] . ')';
         }
@@ -96,7 +97,7 @@ class Route
     public function getUrl($params)
     {
         $path = $this->path;
-        foreach($params as $k => $v) {
+        foreach ($params as $k => $v) {
             $path = str_replace(":$k", $v, $path);
         }
         return $path;
