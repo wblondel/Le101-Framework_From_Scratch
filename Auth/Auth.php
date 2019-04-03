@@ -38,7 +38,7 @@ abstract class Auth
     {
         if (!$this->isLogged()) {
             if ($this->isAjax()) {
-                http_response_code(400);
+                http_response_code(403);
                 echo json_encode(['result' => false]);
                 exit();
             } else {
