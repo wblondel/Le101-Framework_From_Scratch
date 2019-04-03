@@ -32,12 +32,19 @@ abstract class Auth
 
     /**
      * Redirects the user to the index if (s)he is not logged.
+     * If the request is an Ajax requests, return an HTTP 400 error.
      */
     public function restrict()
     {
         if (!$this->isLogged()) {
-            $this->session->setFlash('danger', _("You can't access this page."));
-            exit(header('Location: /'));
+            if ($this->isAjax()) {
+                http_response_code(400);
+                echo json_encode(['result' => false]);
+                exit();
+            } else {
+                $this->session->setFlash('danger', _("You can't access this page."));
+                exit(header('Location: /'));
+            }
         }
     }
 
@@ -108,4 +115,11 @@ abstract class Auth
     abstract public function connectedUserExists();
 
     abstract public function connectFromCookie();
+
+    // TODO: Move this function somewhere more appropriate
+    private function isAjax()
+    {
+        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    }
 }
