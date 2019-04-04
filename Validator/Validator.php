@@ -103,6 +103,20 @@ class Validator
     }
 
     /**
+     * @param string $field
+     * @param string $errorMsg
+     * @return bool
+     */
+    public function isBoolean(string $field, string $errorMsg = '')
+    {
+        if (is_bool($this->getField($field)) === false) {
+            $this->errors[$field] = $errorMsg;
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * @param $field
      * @param $errorMsg
      * @return bool
